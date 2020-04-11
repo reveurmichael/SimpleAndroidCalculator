@@ -7,7 +7,7 @@ Download it on your Android phone and you'll be able to access the calculator ap
 
 # App Platform
 
-![](ss1.png) ![](bp1.png)
+![](screenshot1.png) ![](bp1.png)
 
 ![](screenshot.png)
 ![](bp2.png)
