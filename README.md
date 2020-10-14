@@ -5,7 +5,7 @@ I created a simple and easy to use calculator app for Android smart phones. I ma
 </p>
 
 <p align="center">
-A link to an APK file for Android users can be foud here: <a href="https://github.com/aahmad4/Simple-Calculator/blob/master/app-debug%5B1%5D.apk" target="_blank">app-debug[1].apk</a>
+A link to an APK file for Android users can be found here: <a href="https://github.com/aahmad4/Simple-Calculator/blob/master/app-debug%5B1%5D.apk" target="_blank">app-debug[1].apk</a>
 </p>
 
 ## Repository Contents
