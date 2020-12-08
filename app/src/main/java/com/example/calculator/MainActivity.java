@@ -4,10 +4,18 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
     private EditText result;
@@ -49,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
         Button buttonMinus = (Button) findViewById(R.id.buttonMinus);
         Button buttonPlus = (Button) findViewById(R.id.buttonPlus);
 
+        Button buttonClear = (Button) findViewById(R.id.buttonClear);
+        Button buttonSave = (Button) findViewById(R.id.buttonSave);
+        Button buttonLoad = (Button) findViewById(R.id.buttonLoad);
+
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,6 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 Button b = (Button) v;
                 String op = b.getText().toString();
                 String value = newNumber.getText().toString();
+
                 try {
                     Double doubleValue = Double.valueOf(value);
                     performOperation(doubleValue, op);
@@ -92,6 +105,57 @@ public class MainActivity extends AppCompatActivity {
         buttonPlus.setOnClickListener(opListener);
 
         Button buttonNeg = (Button) findViewById(R.id.buttonNeg);
+
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    BufferedWriter writer = new BufferedWriter(new FileWriter("/storage/sdcard/save.txt"));
+                    writer.write(result.getText().toString() + "\n");
+                    writer.write(newNumber.getText().toString() + "\n");
+                    writer.write(displayOperation.getText().toString() + "\n");
+                    writer.close();
+                    Toast.makeText(MainActivity.this, "Save file success", Toast.LENGTH_SHORT).show();
+                }
+                catch (IOException e){
+                    Toast.makeText(MainActivity.this, "Save file failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+        buttonLoad.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader("/storage/sdcard/save.txt"));
+                    String st;
+                    String line1 = br.readLine();
+                    String line2 = br.readLine();
+                    String line3 = br.readLine();
+                    br.close();
+                    Toast.makeText(MainActivity.this, "Read file success", Toast.LENGTH_SHORT).show();
+                    result.setText(line1);
+                    newNumber.setText(line2);
+                    displayOperation.setText(line3);
+
+                }
+                catch (IOException e){
+                    Toast.makeText(MainActivity.this, "Read file failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        buttonClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                result.setText("");
+                newNumber.setText("");
+                displayOperation.setText("");
+                operand1 = 0.0;
+                operand2 = 0.0;
+            }
+        });
 
         buttonNeg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,10 +208,14 @@ public class MainActivity extends AppCompatActivity {
                     operand1 = operand2;
                     break;
                 case "/":
-                    if (operand2 == 0) {
-                        operand1 = 0.0;
-                    } else {
-                        operand1 /= operand2;
+                    try {
+                        int d1 = (int) operand1.doubleValue();
+                        int d2 = (int) operand2.doubleValue();
+                        int d3 = d1 / d2;
+                        operand1 = new Double(d3);
+                    }
+                    catch (Exception e){
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case "x":
